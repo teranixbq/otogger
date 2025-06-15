@@ -1,0 +1,7 @@
+RADDRS=
+RPASS=
+RUSER=
+
+clientID=
+clientSecret=
+redirectURL=http://localhost:3000/accesstoken
