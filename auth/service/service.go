@@ -12,15 +12,23 @@ type subService struct {
 	oa *oauth2.Config
 }
 
-func NewAuthService() *subService {
-	return &subService{}
+type ServiceInterface interface{
+	RedirectUrl() (string,error)
+	AccessToken(code string, ctx context.Context) (dto.AuthResponse,error)
+	RefreshToken(RefreshToken string, ctx context.Context) (dto.RefreshResponse,error)
+}
+
+func NewAuthService(oa *oauth2.Config) ServiceInterface {
+	return &subService{
+		oa: oa,
+	}
 }
 
 // after login with google u will redirect, and google will give u code in parameter
 func (s *subService) RedirectUrl() (string, error) {
 	url := s.oa.AuthCodeURL("state-token-123", oauth2.AccessTypeOffline)
 	if url == "" {
-		return "", errors.New("failed to generate redirect URL")
+		return "", errors.New("error : failed to generate redirect URL")
 	}
 	return url,nil
 }

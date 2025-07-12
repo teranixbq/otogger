@@ -2,7 +2,6 @@ package dto
 
 import (
 	"time"
-
 	"golang.org/x/oauth2"
 )
 
