@@ -46,4 +46,17 @@ func (h *subHandler) GetAccessToken(f *fiber.Ctx) error {
 	return f.Status(fiber.StatusOK).JSON(helper.SuccessWithDataResponse("success get data",data))
 }
 
+func (h *subHandler) GetRefreshToken(f *fiber.Ctx) error {
+	refreshToken := f.Query("refresh_token")
 
+	data, err := h.si.RefreshToken(refreshToken,f.Context())
+	if err != nil {
+		if strings.Contains(err.Error(),"error") {
+			return f.Status(fiber.StatusBadRequest).JSON(helper.ErrorResponse(err.Error()))			
+		}
+
+		return f.Status(fiber.StatusInternalServerError).JSON(helper.ErrorResponse(err.Error()))
+	}
+
+	return f.Status(fiber.StatusOK).JSON(helper.SuccessWithDataResponse("success get data",data))
+}
